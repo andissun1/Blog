@@ -16,7 +16,7 @@ const getUsers = () =>
 
 const getUserByLogin = async (loginToFind) => {
   const users = await getUsers();
-  return users.find(({ login }) => login === authLogin);
+  return users.find(({ login }) => login === loginToFind);
 };
 
 const addUser = async (login, password) => {

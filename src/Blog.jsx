@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { RouterProvider } from 'react-router/dom';
-import { routes } from './Router/routes';
 import styled from 'styled-components';
+import { Header } from './components/Header';
+import { Outlet } from 'react-router';
 
 const Content = styled.div`
   text-align: center;
@@ -12,20 +11,29 @@ const H2 = styled.h2`
   text-align: center;
 `;
 
-const Header = () => <div>Шапка</div>;
+const BlogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 1000px;
+  min-height: 100%;
+  background-color: white;
+  margin: auto;
+`;
+
 const Footer = () => <div>Футер</div>;
 
-function Blog() {
+function BlogLayuot() {
   return (
-    <>
+    <BlogContainer>
       <Header />
       <Content>
         <H2>Контент страницы</H2>
-        <RouterProvider router={routes} />
+        <Outlet />
       </Content>
       <Footer />
-    </>
+    </BlogContainer>
   );
 }
 
-export default Blog;
+export default BlogLayuot;
