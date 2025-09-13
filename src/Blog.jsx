@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Header } from './components/Header';
 import { Outlet } from 'react-router';
+import { Footer } from './components/Footer';
 
 const Content = styled.div`
   text-align: center;
@@ -20,8 +21,6 @@ const BlogContainer = styled.div`
   background-color: white;
   margin: auto;
 `;
-
-const Footer = () => <div>Футер</div>;
 
 function BlogLayuot() {
   return (

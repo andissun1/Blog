@@ -111,6 +111,6 @@ export const Header = styled(HeaderContainer)`
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 -2px 25px black;
+  box-shadow: 0 -2px 12px black;
   background-color: white;
 `;
