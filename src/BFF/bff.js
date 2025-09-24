@@ -1,4 +1,4 @@
-const ROLES = {
+export const ROLES = {
   admin: 'r1',
   moderator: 'r2',
   user: 'r3',
@@ -33,42 +33,52 @@ const addUser = async (login, password) => {
 };
 
 const allActions = {
-  logOut() {
-    Object.keys(session).forEach((key) => {
-      delete session[key];
-    });
-    console.log('Выход из системы');
-  },
   removeComment() {
     console.log('Удаление комментария');
   },
 };
 
-const createSession = async (role_id) => {
-  const session = {};
-
-  switch (role_id) {
-    case ROLES.admin:
-      session.removeComment = allActions.removeComment;
-      break;
-    case ROLES.moderator:
-      session.removeComment = allActions.removeComment;
-      break;
-    case ROLES.user:
-      break;
-
-    default:
-      // Не расширяем функционал для анонимных пользователей
-      break;
-  }
-
-  return session;
+const sessions = {
+  list: {},
+  create(user) {
+    const hash = Math.random().toFixed(50);
+    this.list[hash] = user;
+    return hash;
+  },
+  remove(hash) {
+    delete this.list[hash];
+  },
 };
+
+// const createSession = async (role_id) => {
+//   const session = {};
+
+//   switch (role_id) {
+//     case ROLES.admin:
+//       session.removeComment = allActions.removeComment;
+//       break;
+//     case ROLES.moderator:
+//       session.removeComment = allActions.removeComment;
+//       break;
+//     case ROLES.user:
+//       break;
+
+//     default:
+//       // Не расширяем функционал для анонимных пользователей
+//       break;
+//   }
+
+//   return session;
+// };
 
 // --- Основная часть бэка ---
 export const server = {
+  async logout(session) {
+    sessions.remove(session);
+    console.log('Выход из системы');
+  },
   async authorize(authLogin, authPassword) {
-    const user = getUserByLogin(authLogin);
+    const user = await getUserByLogin(authLogin);
 
     if (!user) return { error: 'Такой пользователь не найден', response: null };
 
@@ -77,7 +87,12 @@ export const server = {
 
     return {
       error: null,
-      response: createSession(user.role_id),
+      response: {
+        id: user.id,
+        login: user.login,
+        role_id: user.role_id,
+        session: sessions.create(user),
+      },
     };
   },
 
@@ -86,11 +101,11 @@ export const server = {
 
     if (user) return { error: 'Такой логин уже занят', response: null };
 
-    await addUser(regLogin, regPassword);
+    const newUser = await addUser(regLogin, regPassword);
 
     return {
       error: null,
-      response: createSession(ROLES.user),
+      response: sessions.create(newUser),
     };
   },
 };

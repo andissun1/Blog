@@ -8,10 +8,6 @@ const Content = styled.div`
   margin: 120px 0;
 `;
 
-const H2 = styled.h2`
-  text-align: center;
-`;
-
 const BlogContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -27,7 +23,6 @@ function BlogLayuot() {
     <BlogContainer>
       <Header />
       <Content>
-        <H2>Контент страницы</H2>
         <Outlet />
       </Content>
       <Footer />

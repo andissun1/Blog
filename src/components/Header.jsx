@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { Icon } from './Icon';
 import { Link, useNavigate } from 'react-router';
+import { ROLES } from '../BFF/bff';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../store/userReducer';
+import { Button } from './Button';
 
 // ----- Стили -----
 const BigText = styled.div`
@@ -63,11 +67,26 @@ function Logo({ className }) {
 
 function ControlPanel({ className }) {
   const navigate = useNavigate();
+  const role_id = useSelector((store) => store.user.role_id);
+  const login = useSelector((store) => store.user.login);
+  const session = useSelector((store) => store.user.session);
+  const dispatch = useDispatch();
 
   return (
     <div className={className}>
       <RightAligned>
-        <StyledLink to={'login'}>Войти</StyledLink>
+        {role_id === ROLES.anonim ? (
+          <StyledLink to={'login'}>Войти</StyledLink>
+        ) : (
+          <Button>
+            <div>{login}</div>
+            <Icon
+              id="fa fa-sign-out"
+              margin="10px 0px 0 10px"
+              onClick={() => dispatch(actions.logout(session))}
+            />
+          </Button>
+        )}
       </RightAligned>
       <RightAligned>
         <Icon id="fa fa-backward" margin="10px 0px 0 10px" onClick={() => navigate(-1)} />

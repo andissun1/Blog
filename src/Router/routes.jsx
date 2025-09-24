@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import BlogLayuot from '../Blog';
+import { Authorization } from '../pages/authorization/authorization';
 
 export const routes = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <div>Авторизация</div>,
+        Component: Authorization,
       },
       {
         path: 'register',
