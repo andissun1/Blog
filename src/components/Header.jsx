@@ -31,6 +31,8 @@ const Styledlogo = styled(Logo)`
 const RightAligned = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  height: 34px;
 `;
 
 const StyledLink = styled(Link)`
@@ -45,6 +47,11 @@ const StyledLink = styled(Link)`
   background-color: #eee;
 
   border: 1px solid black;
+`;
+
+const UserName = styled.div`
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 const StyledControlPanel = styled(ControlPanel)`
@@ -78,14 +85,15 @@ function ControlPanel({ className }) {
         {role_id === ROLES.anonim ? (
           <StyledLink to={'login'}>Войти</StyledLink>
         ) : (
-          <Button>
-            <div>{login}</div>
+          <RightAligned>
+            <UserName>{login}</UserName>
+
             <Icon
               id="fa fa-sign-out"
-              margin="10px 0px 0 10px"
+              margin="0 0 0 10px"
               onClick={() => dispatch(actions.logout(session))}
             />
-          </Button>
+          </RightAligned>
         )}
       </RightAligned>
       <RightAligned>

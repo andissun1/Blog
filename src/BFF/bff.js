@@ -19,24 +19,38 @@ const getUserByLogin = async (loginToFind) => {
   return users.find(({ login }) => login === loginToFind);
 };
 
+const getRoles = () =>
+  fetch('http://localhost:3000/roles').then((loadedUsers) => loadedUsers.json());
+
 const addUser = async (login, password) => {
-  await fetch('http://localhost:3000/users', {
+  const data = await fetch('http://localhost:3000/users', {
     method: 'POST',
-    headers: { 'Content-Type': 'applicaton/json;charset=utf-8' },
+    headers: { 'Content-Type': 'application/json;charset=utf-8' },
     body: JSON.stringify({
       login,
       password,
       registed_at: generateDate(),
-      role_id: 'r2',
+      role_id: ROLES.user,
     }),
   });
+
+  const newUser = data.json();
+  return newUser;
 };
 
-const allActions = {
-  removeComment() {
-    console.log('Удаление комментария');
-  },
-};
+const transformUser = (dbUser) => ({
+  id: dbUser.id,
+  login: dbUser.login,
+  password: dbUser.password,
+  registed_at: dbUser.registed_at,
+  role_id: dbUser.role_id,
+});
+
+// const allActions = {
+//   removeComment() {
+//     console.log('Удаление комментария');
+//   },
+// };
 
 const sessions = {
   list: {},
@@ -48,28 +62,14 @@ const sessions = {
   remove(hash) {
     delete this.list[hash];
   },
+  access(userSession, accessRoles) {
+    const user = this.list[userSession];
+
+    // Убрал проверку по ролям
+    return !!user && accessRoles.includes(user.role_id);
+    // return true;
+  },
 };
-
-// const createSession = async (role_id) => {
-//   const session = {};
-
-//   switch (role_id) {
-//     case ROLES.admin:
-//       session.removeComment = allActions.removeComment;
-//       break;
-//     case ROLES.moderator:
-//       session.removeComment = allActions.removeComment;
-//       break;
-//     case ROLES.user:
-//       break;
-
-//     default:
-//       // Не расширяем функционал для анонимных пользователей
-//       break;
-//   }
-
-//   return session;
-// };
 
 // --- Основная часть бэка ---
 export const server = {
@@ -97,7 +97,7 @@ export const server = {
   },
 
   async register(regLogin, regPassword) {
-    const user = getUserByLogin(regLogin);
+    const user = await getUserByLogin(regLogin);
 
     if (user) return { error: 'Такой логин уже занят', response: null };
 
@@ -105,7 +105,92 @@ export const server = {
 
     return {
       error: null,
-      response: sessions.create(newUser),
+      response: {
+        id: newUser.id,
+        login: newUser.login,
+        role_id: newUser.role_id,
+        session: sessions.create(newUser),
+      },
+    };
+  },
+
+  async fetchRoles(userSession) {
+    const accessRoles = [ROLES.admin];
+
+    if (!sessions.access(userSession, accessRoles)) {
+      return {
+        error: 'Доступ запрещён',
+        response: null,
+      };
+    }
+
+    const roles = await getRoles();
+
+    return {
+      error: null,
+      response: roles,
+    };
+  },
+
+  async fetchUsers(userSession) {
+    const accessRoles = [ROLES.admin];
+
+    if (!sessions.access(userSession, accessRoles)) {
+      return {
+        error: 'Доступ запрещён',
+        response: null,
+      };
+    }
+
+    const users = await getUsers();
+
+    return {
+      error: null,
+      response: users,
+    };
+  },
+
+  async setUserRole(userSession, userID, role_id) {
+    const accessRoles = [ROLES.admin];
+
+    if (!sessions.access(userSession, accessRoles)) {
+      return {
+        error: 'Доступ запрещён',
+        response: null,
+      };
+    }
+
+    const data = await fetch(`http://localhost:3000/users/${userID}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify({
+        role_id,
+      }),
+    }).then((response) => response.json());
+
+    return {
+      error: null,
+      response: data,
+    };
+  },
+
+  async removeUser(userSession, userID) {
+    const accessRoles = [ROLES.admin];
+
+    if (!sessions.access(userSession, accessRoles)) {
+      return {
+        error: 'Доступ запрещён',
+        response: null,
+      };
+    }
+
+    await fetch(`http://localhost:3000/users/${userID}`, {
+      method: 'DELETE',
+    });
+
+    return {
+      error: null,
+      response: `Пользователь удалён`,
     };
   },
 };

@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router';
 import BlogLayuot from '../Blog';
 import { Authorization } from '../pages/authorization/authorization';
+import { Users } from '../pages/authorization/users';
+import { Post } from '../pages/authorization/Post';
 
 export const routes = createBrowserRouter([
   {
@@ -17,16 +19,16 @@ export const routes = createBrowserRouter([
       },
       {
         path: 'register',
-        element: <div>Регистрация</div>,
+        Component: Authorization,
       },
       {
         path: 'users',
-        element: <div>Пользователи</div>,
+        Component: Users,
       },
 
       {
         path: 'post/:post_Id',
-        element: <div>Статья</div>,
+        Component: Post,
       },
       {
         path: 'post',

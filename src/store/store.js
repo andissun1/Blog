@@ -3,6 +3,7 @@ import { reducer as postReducer } from './postReducer';
 import { reducer as postsReducer } from './postsReducer';
 import { reducer as userReducer } from './userReducer';
 import { reducer as usersReducer } from './usersReducer';
+import { reducer as appReducer } from './appReducer';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     users: usersReducer,
     post: postReducer,
     posts: postsReducer,
+    app: appReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

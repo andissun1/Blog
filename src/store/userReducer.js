@@ -13,6 +13,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setSession: (state, action) => {
+      console.log(action.payload);
+
       return { ...state, ...action.payload };
     },
     logout(state, action) {
