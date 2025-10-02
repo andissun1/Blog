@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { Header } from './components/Header';
 import { Outlet } from 'react-router';
 import { Footer } from './components/Footer';
+import { useLayoutEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { actions } from './store/userReducer';
 
 const Content = styled.div`
   text-align: center;
@@ -19,6 +22,16 @@ const BlogContainer = styled.div`
 `;
 
 function BlogLayuot() {
+  const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    const userSession = sessionStorage.getItem('userSession');
+    const preparedData = JSON.parse(userSession);
+
+    if (!userSession) return;
+    dispatch(actions.setSession(preparedData));
+  }, []);
+
   return (
     <BlogContainer>
       <Header />

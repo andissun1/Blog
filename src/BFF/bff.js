@@ -38,43 +38,71 @@ const addUser = async (login, password) => {
   return newUser;
 };
 
-const transformUser = (dbUser) => ({
-  id: dbUser.id,
-  login: dbUser.login,
-  password: dbUser.password,
-  registed_at: dbUser.registed_at,
-  role_id: dbUser.role_id,
-});
+export async function getSession(hash) {
+  const session = await fetch(`http://localhost:3000/sessions?hash=${hash}`).then(
+    (response) => response.json()
+  );
 
-// const allActions = {
-//   removeComment() {
-//     console.log('Удаление комментария');
-//   },
-// };
+  return session[0];
+}
+
+export async function addSession(hash, user) {
+  await fetch(`http://localhost:3000/sessions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    body: JSON.stringify({
+      hash,
+      user,
+    }),
+  }).then((response) => response.json());
+}
+
+export async function removeSession(sessionId) {
+  await fetch(`http://localhost:3000/sessions/${sessionId}`, {
+    method: 'DELETE',
+  });
+}
+
+// const transformUser = (dbUser) => ({
+//   id: dbUser.id,
+//   login: dbUser.login,
+//   password: dbUser.password,
+//   registed_at: dbUser.registed_at,
+//   role_id: dbUser.role_id,
+// });
 
 const sessions = {
   list: {},
-  create(user) {
+  async create(user) {
     const hash = Math.random().toFixed(50);
-    this.list[hash] = user;
+
+    await addSession(hash, user);
+
     return hash;
   },
-  remove(hash) {
-    delete this.list[hash];
+
+  async remove(hash) {
+    const session = await getSession(hash);
+
+    if (!session) return;
+    removeSession(session[0].id);
   },
-  access(userSession, accessRoles) {
-    const user = this.list[userSession];
+
+  async access(hash, accessRoles) {
+    const session = await getSession(hash);
+
+    if (!session) return false;
 
     // Убрал проверку по ролям
-    return !!user && accessRoles.includes(user.role_id);
-    // return true;
+    return accessRoles.includes(session.user.role_id);
+    return true;
   },
 };
 
 // --- Основная часть бэка ---
 export const server = {
   async logout(session) {
-    sessions.remove(session);
+    await sessions.remove(session);
     console.log('Выход из системы');
   },
   async authorize(authLogin, authPassword) {
@@ -91,7 +119,7 @@ export const server = {
         id: user.id,
         login: user.login,
         role_id: user.role_id,
-        session: sessions.create(user),
+        session: await sessions.create(user),
       },
     };
   },
@@ -109,7 +137,7 @@ export const server = {
         id: newUser.id,
         login: newUser.login,
         role_id: newUser.role_id,
-        session: sessions.create(newUser),
+        session: await sessions.create(newUser),
       },
     };
   },
@@ -117,7 +145,9 @@ export const server = {
   async fetchRoles(userSession) {
     const accessRoles = [ROLES.admin];
 
-    if (!sessions.access(userSession, accessRoles)) {
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
       return {
         error: 'Доступ запрещён',
         response: null,
@@ -135,7 +165,9 @@ export const server = {
   async fetchUsers(userSession) {
     const accessRoles = [ROLES.admin];
 
-    if (!sessions.access(userSession, accessRoles)) {
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
       return {
         error: 'Доступ запрещён',
         response: null,
@@ -153,7 +185,9 @@ export const server = {
   async setUserRole(userSession, userID, role_id) {
     const accessRoles = [ROLES.admin];
 
-    if (!sessions.access(userSession, accessRoles)) {
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
       return {
         error: 'Доступ запрещён',
         response: null,
@@ -177,7 +211,9 @@ export const server = {
   async removeUser(userSession, userID) {
     const accessRoles = [ROLES.admin];
 
-    if (!sessions.access(userSession, accessRoles)) {
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
       return {
         error: 'Доступ запрещён',
         response: null,
@@ -191,6 +227,77 @@ export const server = {
     return {
       error: null,
       response: `Пользователь удалён`,
+    };
+  },
+
+  async fetchPost(postID) {
+    const post = await fetch(`http://localhost:3000/posts/${postID}`).then((response) =>
+      response.json()
+    );
+
+    const comments = await this.getComment(postID);
+
+    const users = await getUsers();
+
+    if (comments.error) {
+      return {
+        error: 'Ошибка при получении комментариев',
+        response: null,
+      };
+    }
+
+    const commentsWithNames = comments.response.map((comment) => {
+      const userLogin = users.find((user) => user.id === comment.author_id).login;
+      return {
+        ...comment,
+        author: userLogin,
+      };
+    });
+
+    return {
+      error: null,
+      response: { ...post, comments: commentsWithNames },
+    };
+  },
+
+  async getComment(postID) {
+    const comments = await fetch(`http://localhost:3000/comments?post_Id=${postID}`).then(
+      (response) => response.json()
+    );
+
+    return {
+      error: null,
+      response: comments,
+    };
+  },
+
+  async addComment(userSession, commentInfo) {
+    const accessRoles = [ROLES.admin, ROLES.moderator, ROLES.user];
+
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
+      return {
+        error:
+          'Доступ запрещён. Оставлять комментарии могуть только авторизованные пользователи',
+        response: null,
+      };
+    }
+
+    const newComment = await fetch(`http://localhost:3000/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify({
+        author_id: commentInfo.author_id,
+        post_Id: commentInfo.post_Id,
+        content: commentInfo.content,
+        published_at: generateDate(),
+      }),
+    }).then((response) => response.json());
+
+    return {
+      error: null,
+      response: newComment,
     };
   },
 };

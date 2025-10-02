@@ -8,7 +8,7 @@ import { Input } from '../../components/input';
 import { Button } from '../../components/Button';
 import { Link, useNavigate } from 'react-router';
 import { H2 } from '../../components/H2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../store/userReducer';
 import { useLocation } from 'react-router';
 
@@ -47,6 +47,7 @@ const registerFormShema = yup.object().shape({
 
 const AuthorizationContainer = ({ className }) => {
   const [serverError, setServerError] = useState(null);
+  const session = useSelector((store) => store.user.session);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const route = useLocation();
@@ -76,6 +77,7 @@ const AuthorizationContainer = ({ className }) => {
         }
 
         dispatch(actions.setSession(response));
+        sessionStorage.setItem('userSession', JSON.stringify(response));
         reset();
         navigate('/');
       });
@@ -87,6 +89,8 @@ const AuthorizationContainer = ({ className }) => {
         }
 
         dispatch(actions.setSession(response));
+        sessionStorage.setItem('userSession', JSON.stringify(response));
+
         reset();
         navigate('/');
       });
@@ -98,6 +102,10 @@ const AuthorizationContainer = ({ className }) => {
     errors?.password?.message ||
     errors?.repeatPassword?.message;
   const errorMessage = formError || serverError;
+
+  if (session) {
+    return <h2>Вы авторизованы</h2>;
+  }
 
   return (
     <div className={className}>

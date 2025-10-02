@@ -18,7 +18,7 @@
       "login": "qweqwe",
       "password": "qweqwe",
       "registed_at": "2044-06-24 08:12",
-      "role_id": "r2",
+      "role_id": "r3",
       "id": "OlpY1wv"
     }
   ],
@@ -63,5 +63,54 @@
       "published_at": "2020-06-30"
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "author_id": "OlpY1wv",
+      "post_Id": "001",
+      "content": "213123",
+      "published_at": "2033-12-12 02:09",
+      "id": 1
+    },
+    {
+      "author_id": "OlpY1wv",
+      "post_Id": "001",
+      "content": "2131233123213",
+      "published_at": "2055-09-10 13:30",
+      "id": 2
+    },
+    {
+      "author_id": "OlpY1wv",
+      "post_Id": "001",
+      "content": "2131233123213123123",
+      "published_at": "2062-11-22 04:39",
+      "id": 3
+    },
+    {
+      "author_id": "OlpY1wv",
+      "post_Id": "001",
+      "content": "Новый комментарий",
+      "published_at": "2053-06-30 07:16",
+      "id": 4
+    },
+    {
+      "author_id": "OlpY1wv",
+      "post_Id": "001",
+      "content": "312313",
+      "published_at": "2052-11-11 08:32",
+      "id": 5
+    }
+  ],
+  "sessions": [
+    {
+      "hash": "0.40400413909629595554662273571011610329151153564453",
+      "user": {
+        "login": "qweqwe",
+        "password": "qweqwe",
+        "registed_at": "2044-06-24 08:12",
+        "role_id": "r3",
+        "id": "OlpY1wv"
+      },
+      "id": 1
+    }
+  ]
 }
