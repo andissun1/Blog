@@ -18,6 +18,24 @@ export const addComment = createAsyncThunk(
   }
 );
 
+export const deleteComment = createAsyncThunk(
+  'post/deleteComment',
+  async (commentid, { getState, rejectWithValue, dispatch }) => {
+    const userSession = getState().user.session;
+    const response = await server.removeComment(userSession, commentid);
+
+    if (response.error) return rejectWithValue('Нет прав на удаление');
+
+    const newCommentsState = getState().post.comments.filter(
+      (comment) => commentid !== comment.id
+    );
+
+    dispatch({ type: 'app/closeModalWindow' });
+
+    return newCommentsState;
+  }
+);
+
 const postSlice = createSlice({
   name: 'post',
   initialState: {
@@ -49,6 +67,14 @@ const postSlice = createSlice({
         };
       });
     builder.addCase(addComment.rejected, (state, action) => ({
+      ...state,
+      commentsErrors: action.payload,
+    })),
+      builder.addCase(deleteComment.fulfilled, (state, action) => ({
+        ...state,
+        comments: action.payload,
+      }));
+    builder.addCase(deleteComment.rejected, (state, action) => ({
       ...state,
       commentsErrors: action.payload,
     }));

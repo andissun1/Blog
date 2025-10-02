@@ -72,32 +72,11 @@
       "id": 1
     },
     {
-      "author_id": "OlpY1wv",
+      "author_id": "001",
       "post_Id": "001",
-      "content": "2131233123213",
-      "published_at": "2055-09-10 13:30",
+      "content": "2e12e12e1",
+      "published_at": "2045-05-06 16:19",
       "id": 2
-    },
-    {
-      "author_id": "OlpY1wv",
-      "post_Id": "001",
-      "content": "2131233123213123123",
-      "published_at": "2062-11-22 04:39",
-      "id": 3
-    },
-    {
-      "author_id": "OlpY1wv",
-      "post_Id": "001",
-      "content": "Новый комментарий",
-      "published_at": "2053-06-30 07:16",
-      "id": 4
-    },
-    {
-      "author_id": "OlpY1wv",
-      "post_Id": "001",
-      "content": "312313",
-      "published_at": "2052-11-11 08:32",
-      "id": 5
     }
   ],
   "sessions": [
@@ -111,6 +90,17 @@
         "id": "OlpY1wv"
       },
       "id": 1
+    },
+    {
+      "hash": "0.51979289290445251925376624058117158710956573486328",
+      "user": {
+        "id": "001",
+        "login": "andrey",
+        "password": "123123",
+        "registed_at": "2050-09-22",
+        "role_id": "r1"
+      },
+      "id": 2
     }
   ]
 }

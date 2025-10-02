@@ -300,4 +300,26 @@ export const server = {
       response: newComment,
     };
   },
+
+  async removeComment(userSession, commentid) {
+    const accessRoles = [ROLES.admin, ROLES.moderator];
+
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
+      return {
+        error: 'Доступ запрещён. Удалять комментарии могут только администраторы',
+        response: null,
+      };
+    }
+
+    await fetch(`http://localhost:3000/comments/${commentid}`, {
+      method: 'DELETE',
+    });
+
+    return {
+      error: null,
+      response: 'Комментарий удалён',
+    };
+  },
 };

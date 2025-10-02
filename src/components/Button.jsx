@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const ButtonContainer = ({ children, className, width, ...props }) => {
-  return <button className={className} {...props} children={children} />;
+const ButtonContainer = ({ ...props }) => {
+  return <button {...props} />;
 };
 
 export const Button = styled(ButtonContainer)`
@@ -11,6 +11,7 @@ export const Button = styled(ButtonContainer)`
   align-items: center;
   font-size: 18px;
   height: 32px;
+  margin: 0 5px;
   background-color: #eee;
   border: 1px solid black;
 `;
