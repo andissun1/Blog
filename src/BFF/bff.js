@@ -231,9 +231,17 @@ export const server = {
   },
 
   async fetchPost(postID) {
-    const post = await fetch(`http://localhost:3000/posts/${postID}`).then((response) =>
-      response.json()
-    );
+    const post = await fetch(`http://localhost:3000/posts/${postID}`).then((response) => {
+      if (!response.ok) return false;
+      return response.json();
+    });
+
+    if (!post) {
+      return {
+        error: 'Ошибка. Пост не найден.',
+        response: null,
+      };
+    }
 
     const comments = await this.getComment(postID);
 
@@ -320,6 +328,69 @@ export const server = {
     return {
       error: null,
       response: 'Комментарий удалён',
+    };
+  },
+
+  async savePost(userSession, postData) {
+    const accessRoles = [ROLES.admin];
+
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
+      return {
+        error: 'Доступ запрещён. Редактировать пост могут только администраторы',
+        response: null,
+      };
+    }
+
+    if (postData.id === '') {
+      postData = await fetch(`http://localhost:3000/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+        body: JSON.stringify({
+          ...postData,
+        }),
+      }).then((response) => response.json());
+    } else {
+      postData = await fetch(`http://localhost:3000/posts/${postData.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json;charset=utf-8' },
+        body: JSON.stringify({
+          ...postData,
+        }),
+      }).then((response) => response.json());
+    }
+
+    return {
+      error: null,
+      response: postData,
+    };
+  },
+
+  async removePost(userSession, postID) {
+    const accessRoles = [ROLES.admin, ROLES.moderator];
+
+    const access = await sessions.access(userSession, accessRoles);
+
+    if (!access) {
+      return {
+        error: 'Доступ запрещён. Удалять посты могут только администраторы',
+        response: null,
+      };
+    }
+
+    const comments = await this.getComment(postID);
+    await Promise.all(
+      comments.response.map(({ id }) => this.removeComment(userSession, id))
+    );
+
+    await fetch(`http://localhost:3000/posts/${postID}`, {
+      method: 'DELETE',
+    });
+
+    return {
+      error: null,
+      response: 'Пост удалён',
     };
   },
 };

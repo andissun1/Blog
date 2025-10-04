@@ -51,7 +51,7 @@ const CommentsContainer = ({ className, post_Id }) => {
 
 export const Comments = styled(CommentsContainer)`
   width: 580px;
-  margin: 20px auto;
+  margin: 40px auto 20px auto;
 
   & .new-commment {
     display: flex;

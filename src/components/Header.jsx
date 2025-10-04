@@ -33,6 +33,10 @@ const RightAligned = styled.div`
   justify-content: flex-end;
   align-items: center;
   height: 34px;
+
+  & i {
+    cursor: pointer;
+  }
 `;
 
 const StyledLink = styled(Link)`

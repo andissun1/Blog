@@ -45,7 +45,7 @@
       "id": "001",
       "title": "Пример заголовка",
       "image_URL": "https://miss7.24sata.hr/media/img/6f/a8/645d32bd3c3c7b4ac9a4.jpeg",
-      "content": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+      "content": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. \n \n Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).\n\nНовый абзац",
       "published_at": "2020-06-30"
     },
     {
@@ -59,8 +59,20 @@
       "id": "003",
       "title": "Пример заголовка",
       "image_URL": "https://miss7.24sata.hr/media/img/6f/a8/645d32bd3c3c7b4ac9a4.jpeg",
-      "content": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+      "content": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. \n \n Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).\n\nНовый абзац",
       "published_at": "2020-06-30"
+    },
+    {
+      "id": "gjsSC4l",
+      "image_URL": "https://i.pinimg.com/originals/3a/69/ae/3a69aee66a3f324915ee3085baf9c6c4.jpg",
+      "title": "За Россию!",
+      "content": "Повседневная практика показывает, что понимание сути ресурсосберегающих технологий не оставляет шанса для приоритизации разума над эмоциями. С учётом сложившейся международной обстановки, убеждённость некоторых оппонентов позволяет выполнить важные задания по разработке дальнейших направлений развития. А ещё действия представителей оппозиции описаны максимально подробно.<div><br></div><div>Современные технологии достигли такого уровня, что сплочённость команды профессионалов способствует повышению качества приоретизации разума над эмоциями. Наше дело не так однозначно, как может показаться: постоянный количественный рост и сфера нашей активности является качественно новой ступенью дальнейших направлений развития. С другой стороны, реализация намеченных плановых заданий, а также свежий взгляд на привычные вещи — безусловно открывает новые горизонты для своевременного выполнения сверхзадачи.</div>"
+    },
+    {
+      "id": "cKP7ZTK",
+      "image_URL": "https://i.pinimg.com/originals/92/3f/ef/923fefe4b3aa3d8496f3b5a2095277be.jpg",
+      "title": "Милые хомячки",
+      "content": "Милые хомячки"
     }
   ],
   "comments": [
@@ -101,6 +113,28 @@
         "role_id": "r1"
       },
       "id": 2
+    },
+    {
+      "hash": "0.53985516568302083229013987875077873468399047851563",
+      "user": {
+        "id": "001",
+        "login": "andrey",
+        "password": "123123",
+        "registed_at": "2050-09-22",
+        "role_id": "r1"
+      },
+      "id": 3
+    },
+    {
+      "hash": "0.92136037836053608085506994029856286942958831787109",
+      "user": {
+        "id": "001",
+        "login": "andrey",
+        "password": "123123",
+        "registed_at": "2050-09-22",
+        "role_id": "r1"
+      },
+      "id": 4
     }
   ]
 }

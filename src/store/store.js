@@ -5,6 +5,8 @@ import { reducer as userReducer } from './userReducer';
 import { reducer as usersReducer } from './usersReducer';
 import { reducer as appReducer } from './appReducer';
 
+let test = 'test';
+
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -13,5 +15,6 @@ export const store = configureStore({
     posts: postsReducer,
     app: appReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ thunk: { extraArgument: { test } } }),
 });

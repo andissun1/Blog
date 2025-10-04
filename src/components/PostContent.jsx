@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { H2 } from './H2';
 import { Icon } from './Icon';
+import { useNavigate } from 'react-router';
+import { ModalWindow } from './modalWindow';
+import { deletePost } from '../store/postReducer.js';
+import { useDispatch } from 'react-redux';
+import { actions } from '../store/appReducer.js';
 
 const PostContentContainer = ({
   id,
@@ -10,6 +15,9 @@ const PostContentContainer = ({
   published_at,
   className,
 }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <div className={className}>
       {image_URL && <img src={image_URL} />}
@@ -20,16 +28,34 @@ const PostContentContainer = ({
         </div>
         <div>
           <button>
-            <Icon id="fa fa-pencil-square-o" size={'21px'} />
+            <Icon
+              id="fa fa-pencil-square-o"
+              size={'21px'}
+              onClick={() => navigate('edit')}
+            />
           </button>
           <button>
-            <Icon id="fa fa-trash-o" size={'21px'} />
+            <Icon
+              id="fa fa-trash-o"
+              size={'21px'}
+              onClick={() => dispatch(actions.openModalWindow())}
+            />
           </button>
         </div>
       </div>
       <div className="">{content}</div>
+      <ModalWindow
+        text={'Удалить пост?'}
+        onCancel={() => dispatch(actions.closeModalWindow())}
+        onConfirm={() => {
+          dispatch(deletePost(id));
+          navigate('/');
+        }}
+      />
     </div>
   );
 };
 
-export const PostContent = styled(PostContentContainer)``;
+export const PostContent = styled(PostContentContainer)`
+  white-space: pre-line;
+`;

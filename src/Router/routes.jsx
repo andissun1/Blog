@@ -31,8 +31,12 @@ export const routes = createBrowserRouter([
         Component: Post,
       },
       {
+        path: 'post/:post_Id/edit',
+        Component: Post,
+      },
+      {
         path: 'post',
-        element: <div>Новая статья</div>,
+        element: <Post />,
       },
       {
         path: '*',

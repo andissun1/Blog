@@ -1,11 +1,27 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { server } from '../BFF/bff';
 
+const initialState = {
+  id: '',
+  title: '',
+  image_URL: '',
+  content: '',
+  published_at: '',
+  comments: [],
+  commentsErrors: null,
+  postErrors: null,
+};
+
 // Асинхронные операции
-export const loadPost = createAsyncThunk('post/loadPost', async (postID) => {
-  const post = await server.fetchPost(postID);
-  return post;
-});
+export const loadPost = createAsyncThunk(
+  'post/loadPost',
+  async (postID, { rejectWithValue }) => {
+    const post = await server.fetchPost(postID);
+
+    if (post.error) return rejectWithValue(post.error);
+    return post;
+  }
+);
 
 export const addComment = createAsyncThunk(
   'post/addComment',
@@ -15,6 +31,29 @@ export const addComment = createAsyncThunk(
 
     if (error) return rejectWithValue(error);
     return response;
+  }
+);
+
+export const savePost = createAsyncThunk(
+  'post/savePost',
+  async (postInfo, { getState, rejectWithValue }) => {
+    const userSession = getState().user.session;
+    const { error, response } = await server.savePost(userSession, postInfo);
+
+    if (error) return rejectWithValue(error);
+    return response;
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async (postID, { getState, rejectWithValue, dispatch }) => {
+    const userSession = getState().user.session;
+    const response = await server.removePost(userSession, postID);
+
+    if (response.error) return rejectWithValue('Нет прав на удаление');
+
+    dispatch({ type: 'app/closeModalWindow' });
   }
 );
 
@@ -38,15 +77,7 @@ export const deleteComment = createAsyncThunk(
 
 const postSlice = createSlice({
   name: 'post',
-  initialState: {
-    id: '',
-    title: '',
-    image_URL: '',
-    content: '',
-    published_at: '',
-    comments: [],
-    commentsErrors: null,
-  },
+  initialState,
   reducers: {
     addPost: (state, action) => {
       return state;
@@ -54,12 +85,17 @@ const postSlice = createSlice({
     setPostData: (state, action) => {
       return state;
     },
+    resetPost: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(loadPost.fulfilled, (state, action) => ({
       ...state,
       ...action.payload.response,
     })),
+      builder.addCase(loadPost.rejected, (state, action) => ({
+        ...initialState,
+        postErrors: action.payload,
+      })),
       builder.addCase(addComment.fulfilled, (state, action) => {
         return {
           ...state,
@@ -78,6 +114,11 @@ const postSlice = createSlice({
       ...state,
       commentsErrors: action.payload,
     }));
+    builder.addCase(savePost.fulfilled, (state, action) => ({
+      ...state,
+      ...action.payload,
+    }));
+    builder.addCase(deletePost.fulfilled, (state, action) => initialState);
   },
 });
 

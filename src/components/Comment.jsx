@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { deleteComment } from '../store/postReducer';
 import { actions } from '../store/appReducer';
 import { ModalWindow } from './modalWindow';
+import { useState } from 'react';
 
 const CommentContainer = ({ className, id, author, content, published_at }) => {
   const dispatch = useDispatch();
-
-  const hanldeDeleteComment = () => dispatch(actions.openModalWindow());
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (
     <div className={className}>
@@ -29,13 +29,21 @@ const CommentContainer = ({ className, id, author, content, published_at }) => {
         id="fa fa-trash-o"
         size={'21px'}
         margin={'0 0 0 12px'}
-        onClick={hanldeDeleteComment}
+        onClick={() => {
+          setIsOpenModal(true);
+          dispatch(actions.openModalWindow());
+        }}
       />
-      <ModalWindow
-        text={'Удалить комментарий?'}
-        onCancel={() => dispatch(actions.closeModalWindow())}
-        onConfirm={() => dispatch(deleteComment(id))}
-      />
+      {isOpenModal && (
+        <ModalWindow
+          text={'Удалить комментарий?'}
+          onCancel={() => {
+            setIsOpenModal(false);
+            dispatch(actions.closeModalWindow());
+          }}
+          onConfirm={() => dispatch(deleteComment(id))}
+        />
+      )}
     </div>
   );
 };
