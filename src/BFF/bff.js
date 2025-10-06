@@ -230,10 +230,19 @@ export const server = {
     };
   },
 
-  async fetchPosts() {
-    const posts = await fetch(`http://localhost:3000/posts`).then((response) => {
+  async fetchPosts(page, searchTitle) {
+    const PAGINATION_LIMIT = 10;
+    const search = searchTitle ? `title_like=${searchTitle}&` : '';
+    let url = `http://localhost:3000/posts`;
+
+    if (page) {
+      url = `http://localhost:3000/posts?${search}_page=${page}&_limit=${PAGINATION_LIMIT}`;
+    }
+
+    const [posts, links] = await fetch(url).then((response) => {
       if (!response.ok) return false;
-      return response.json();
+
+      return Promise.all([response.json(), response.headers.get('Link')]);
     });
 
     if (!posts) {
@@ -251,6 +260,7 @@ export const server = {
         ...post,
         commentsCount: ALLcomments.filter(({ post_Id }) => post_Id === post.id).length,
       })),
+      links: links && links.match(/_page=(\d+)&_limit=\d+>; rel="last"$/)[1],
     };
   },
 

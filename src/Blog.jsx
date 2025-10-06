@@ -8,7 +8,7 @@ import { actions } from './store/userReducer';
 
 const Content = styled.div`
   text-align: center;
-  margin: 120px 0;
+  margin: 120px 0 40px 0;
 `;
 
 const BlogContainer = styled.div`
@@ -16,7 +16,7 @@ const BlogContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 1000px;
-  min-height: 100%;
+  min-height: 100vh;
   background-color: white;
   margin: auto;
 `;
