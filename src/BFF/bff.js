@@ -230,6 +230,30 @@ export const server = {
     };
   },
 
+  async fetchPosts() {
+    const posts = await fetch(`http://localhost:3000/posts`).then((response) => {
+      if (!response.ok) return false;
+      return response.json();
+    });
+
+    if (!posts) {
+      return {
+        error: 'Ошибка. Посты не найдены.',
+        response: null,
+      };
+    }
+
+    const ALLcomments = (await this.getComment()).response;
+
+    return {
+      error: null,
+      response: posts.map((post) => ({
+        ...post,
+        commentsCount: ALLcomments.filter(({ post_Id }) => post_Id === post.id).length,
+      })),
+    };
+  },
+
   async fetchPost(postID) {
     const post = await fetch(`http://localhost:3000/posts/${postID}`).then((response) => {
       if (!response.ok) return false;
@@ -269,6 +293,17 @@ export const server = {
   },
 
   async getComment(postID) {
+    if (!postID) {
+      const ALLcomments = await fetch(`http://localhost:3000/comments`).then((response) =>
+        response.json()
+      );
+
+      return {
+        error: null,
+        response: ALLcomments,
+      };
+    }
+
     const comments = await fetch(`http://localhost:3000/comments?post_Id=${postID}`).then(
       (response) => response.json()
     );
