@@ -5,6 +5,8 @@ import { deleteComment } from '../store/postReducer';
 import { actions } from '../store/appReducer';
 import { ModalWindow } from './modalWindow';
 import { useState } from 'react';
+import { PrivateContent } from './PrivateContent';
+import { ROLES } from '../BFF/bff';
 
 const CommentContainer = ({ className, id, author, content, published_at }) => {
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ const CommentContainer = ({ className, id, author, content, published_at }) => {
         </div>
         <div className="comment__text">{content}</div>
       </div>
+
       <Icon
         id="fa fa-trash-o"
         size={'21px'}
@@ -34,15 +37,18 @@ const CommentContainer = ({ className, id, author, content, published_at }) => {
           dispatch(actions.openModalWindow());
         }}
       />
+
       {isOpenModal && (
-        <ModalWindow
-          text={'Удалить комментарий?'}
-          onCancel={() => {
-            setIsOpenModal(false);
-            dispatch(actions.closeModalWindow());
-          }}
-          onConfirm={() => dispatch(deleteComment(id))}
-        />
+        <PrivateContent access={[ROLES.admin]}>
+          <ModalWindow
+            text={'Удалить комментарий?'}
+            onCancel={() => {
+              setIsOpenModal(false);
+              dispatch(actions.closeModalWindow());
+            }}
+            onConfirm={() => dispatch(deleteComment(id))}
+          />
+        </PrivateContent>
       )}
     </div>
   );

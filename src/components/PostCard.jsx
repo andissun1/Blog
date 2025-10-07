@@ -43,6 +43,8 @@ export const PostCard = styled(PostCardContainer)`
   & .card__postInfo {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    background: #00000012;
   }
 
   & .card__footer {

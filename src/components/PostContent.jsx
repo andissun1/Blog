@@ -4,8 +4,10 @@ import { Icon } from './Icon';
 import { useNavigate } from 'react-router';
 import { ModalWindow } from './modalWindow';
 import { deletePost } from '../store/postReducer.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../store/appReducer.js';
+import { ROLES } from '../BFF/bff.js';
+import { PrivateContent } from './PrivateContent.jsx';
 
 const PostContentContainer = ({
   id,
@@ -17,6 +19,7 @@ const PostContentContainer = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isOpenModal = useSelector((store) => store.app.modal.isOpen);
 
   return (
     <div className={className}>
@@ -44,14 +47,18 @@ const PostContentContainer = ({
         </div>
       </div>
       <div className="">{content}</div>
-      <ModalWindow
-        text={'Удалить пост?'}
-        onCancel={() => dispatch(actions.closeModalWindow())}
-        onConfirm={() => {
-          dispatch(deletePost(id));
-          navigate('/');
-        }}
-      />
+      {isOpenModal && (
+        <PrivateContent access={[ROLES.admin]}>
+          <ModalWindow
+            text={'Удалить пост?'}
+            onCancel={() => dispatch(actions.closeModalWindow())}
+            onConfirm={() => {
+              dispatch(deletePost(id));
+              navigate('/');
+            }}
+          />
+        </PrivateContent>
+      )}
     </div>
   );
 };

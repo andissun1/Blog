@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ModalWindow } from './modalWindow';
 import { actions } from '../store/appReducer';
+import { actions as postActions } from '../store/postReducer';
 
 const PostFormContainer = ({
   id,
@@ -28,6 +29,7 @@ const PostFormContainer = ({
       imageRef.current.value = '';
       titleRef.current.value = '';
       contentRef.current.innerHTML = '';
+      dispatch(postActions.resetPost());
     }
   }, [isCreating]);
 

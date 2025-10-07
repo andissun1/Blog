@@ -137,6 +137,7 @@ export const Header = styled(HeaderContainer)`
   height: 120px;
   padding: 0 40px;
   box-sizing: border-box;
+  z-index: 10;
 
   display: flex;
   justify-content: space-between;

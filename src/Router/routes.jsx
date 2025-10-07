@@ -4,6 +4,7 @@ import { Authorization } from '../pages/authorization/authorization';
 import { Users } from '../pages/authorization/users';
 import { Post } from '../pages/authorization/Post';
 import { Main } from '../pages/Main';
+import { ErrorPage } from '../pages/ErrorPage';
 
 export const routes = createBrowserRouter([
   {
@@ -41,7 +42,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: '*',
-        element: <div>Страница с ошибкой</div>,
+        Component: ErrorPage,
       },
     ],
   },

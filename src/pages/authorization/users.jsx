@@ -2,21 +2,26 @@ import styled from 'styled-components';
 import { H2 } from '../../components/H2';
 import { useServer } from '../../hooks/useServer';
 import { useEffect, useState } from 'react';
-import { ErrorLayout } from '../../components/ErrorLayout';
 import { UserRow } from '../../components/UserRow';
 import { ROLES } from '../../BFF/bff';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../../store/appReducer';
+import { useNavigate } from 'react-router';
 
 export const usersContainer = ({ className }) => {
+  const errorMessage = useSelector((store) => store.app.accessErrors);
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
   const requestServer = useServer();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     Promise.all([requestServer('fetchRoles'), requestServer('fetchUsers')]).then(
       ([roles, users]) => {
         if (roles.error || users.error) {
-          setErrorMessage(roles.error || users.error);
+          dispatch(actions.setAccessError(roles.error || users.error));
+          navigate('/error');
           return;
         }
 
@@ -24,7 +29,7 @@ export const usersContainer = ({ className }) => {
         setUsers(users.response);
       }
     );
-  }, [requestServer]);
+  }, []);
 
   const userDelete = (userID) => {
     requestServer('removeUser', userID).then(({ response }) => {
@@ -33,9 +38,7 @@ export const usersContainer = ({ className }) => {
     });
   };
 
-  if (errorMessage) {
-    return <ErrorLayout error={errorMessage} />;
-  }
+  if (errorMessage) return;
 
   return (
     <div className={className}>

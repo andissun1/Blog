@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PostContent } from '../../components/PostContent';
 import { Comments } from '../../components/Comments';
-import { useMatch, useParams } from 'react-router';
+import { useMatch, useNavigate, useParams } from 'react-router';
 import { loadPost } from '../../store/postReducer';
 import { PostForm } from '../../components/PostForm';
+import { PrivateContent } from '../../components/PrivateContent';
+import { ROLES } from '../../BFF/bff';
 
 const PostContainer = ({ className }) => {
   const params = useParams();
@@ -13,18 +15,24 @@ const PostContainer = ({ className }) => {
   const isCreating = useMatch('/post');
   const post = useSelector((store) => store.post);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isCreating) return;
     dispatch(loadPost(params.post_Id));
   }, []);
 
-  if (post.postErrors) return <h2>"Страница не найдена"</h2>;
+  if (post.postErrors) {
+    navigate('/error');
+    return;
+  }
 
   return (
     <div className={className}>
       {isEditing || isCreating ? (
-        <PostForm {...post} isCreating={isCreating} />
+        <PrivateContent access={[ROLES.admin]}>
+          <PostForm {...post} isCreating={isCreating} />
+        </PrivateContent>
       ) : (
         <>
           <PostContent {...post} />
@@ -58,6 +66,7 @@ export const Post = styled(PostContainer)`
   & img {
     float: left;
     margin: 0 20px 20px 0;
+    max-width: 100%;
   }
 
   & button {
