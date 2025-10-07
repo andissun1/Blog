@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { H2 } from '../../components/H2';
-import { useServer } from '../../hooks/useServer';
+import { H2 } from '../components/H2';
+import { useServer } from '../hooks/useServer';
 import { useEffect, useState } from 'react';
-import { UserRow } from '../../components/UserRow';
-import { ROLES } from '../../BFF/bff';
+import { UserRow } from '../components/UserRow';
+import { ROLES } from '../BFF/bff';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../store/appReducer';
+import { actions } from '../store/appReducer';
 import { useNavigate } from 'react-router';
 
 export const usersContainer = ({ className }) => {

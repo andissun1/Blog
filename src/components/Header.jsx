@@ -82,6 +82,7 @@ function ControlPanel({ className }) {
   const login = useSelector((store) => store.user.login);
   const session = useSelector((store) => store.user.session);
   const dispatch = useDispatch();
+  const isAdmin = role_id === ROLES.admin;
 
   return (
     <div className={className}>
@@ -102,13 +103,16 @@ function ControlPanel({ className }) {
       </RightAligned>
       <RightAligned>
         <Icon id="fa fa-backward" margin="10px 0px 0 10px" onClick={() => navigate(-1)} />
-
-        <Link to={'post'}>
-          <Icon id="fa fa-file-text-o" margin="10px 0px 0 10px" />
-        </Link>
-        <Link to={'users'}>
-          <Icon id="fa fa-users" margin="10px 0px 0 10px" />
-        </Link>
+        {isAdmin && (
+          <>
+            <Link to={'post'}>
+              <Icon id="fa fa-file-text-o" margin="10px 0px 0 10px" />
+            </Link>
+            <Link to={'users'}>
+              <Icon id="fa fa-users" margin="10px 0px 0 10px" />
+            </Link>
+          </>
+        )}
       </RightAligned>
     </div>
   );

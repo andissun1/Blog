@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../store/appReducer.js';
 import { ROLES } from '../BFF/bff.js';
 import { PrivateContent } from './PrivateContent.jsx';
+import PropTypes from 'prop-types';
 
 const PostContentContainer = ({
   id,
@@ -16,6 +17,7 @@ const PostContentContainer = ({
   content,
   published_at,
   className,
+  isAdmin,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,20 +32,25 @@ const PostContentContainer = ({
           <Icon id="fa fa-calendar-o" size={'18px'} /> {published_at}
         </div>
         <div>
-          <button>
-            <Icon
-              id="fa fa-pencil-square-o"
-              size={'21px'}
-              onClick={() => navigate('edit')}
-            />
-          </button>
-          <button>
-            <Icon
-              id="fa fa-trash-o"
-              size={'21px'}
-              onClick={() => dispatch(actions.openModalWindow())}
-            />
-          </button>
+          {isAdmin && (
+            <>
+              {' '}
+              <button>
+                <Icon
+                  id="fa fa-pencil-square-o"
+                  size={'21px'}
+                  onClick={() => navigate('edit')}
+                />
+              </button>
+              <button>
+                <Icon
+                  id="fa fa-trash-o"
+                  size={'21px'}
+                  onClick={() => dispatch(actions.openModalWindow())}
+                />
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className="">{content}</div>
@@ -66,3 +73,12 @@ const PostContentContainer = ({
 export const PostContent = styled(PostContentContainer)`
   white-space: pre-line;
 `;
+
+PostContent.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  image_URL: PropTypes.string,
+  content: PropTypes.string,
+  published_at: PropTypes.string,
+  isAdmin: PropTypes.bool,
+};

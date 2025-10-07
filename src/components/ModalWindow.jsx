@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Button } from './Button';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const ModalWindowContainer = ({ className, onConfirm, onCancel, text }) => {
   const isOpen = useSelector((store) => store.app.modal.isOpen);
@@ -58,3 +59,9 @@ export const ModalWindow = styled(ModalWindowContainer)`
     border: 1px solid black;
   }
 `;
+
+ModalWindow.propTypes = {
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
+  text: PropTypes.string,
+};

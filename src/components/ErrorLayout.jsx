@@ -1,5 +1,6 @@
 import { H2 } from './H2';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Div = styled.div`
   display: flex;
@@ -13,3 +14,7 @@ export const ErrorLayout = ({ error }) => (
     <Div>{error}</Div>
   </>
 );
+
+Error.propTypes = {
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.exact(null)]),
+};

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ROLES } from '../BFF/bff';
 import { Icon } from './Icon';
 import { useServer } from '../hooks/useServer';
+import PropTypes from 'prop-types';
 
 export const UserRow = ({ login, registed_at, role_id, roles, userID, userDelete }) => {
   const [initialRole, setInitialRole] = useState(role_id);
@@ -54,4 +55,13 @@ export const UserRow = ({ login, registed_at, role_id, roles, userID, userDelete
       />
     </div>
   );
+};
+
+UserRow.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  image_URL: PropTypes.string,
+  content: PropTypes.string,
+  published_at: PropTypes.string,
+  isAdmin: PropTypes.bool,
 };

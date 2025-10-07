@@ -7,10 +7,13 @@ import { ModalWindow } from './modalWindow';
 import { useState } from 'react';
 import { PrivateContent } from './PrivateContent';
 import { ROLES } from '../BFF/bff';
+import PropTypes from 'prop-types';
 
-const CommentContainer = ({ className, id, author, content, published_at }) => {
+const CommentContainer = ({ className, id, author, content, published_at, role_id }) => {
   const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const isAdminOrModerator = role_id === ROLES.admin || role_id === ROLES.moderator;
 
   return (
     <div className={className}>
@@ -28,15 +31,17 @@ const CommentContainer = ({ className, id, author, content, published_at }) => {
         <div className="comment__text">{content}</div>
       </div>
 
-      <Icon
-        id="fa fa-trash-o"
-        size={'21px'}
-        margin={'0 0 0 12px'}
-        onClick={() => {
-          setIsOpenModal(true);
-          dispatch(actions.openModalWindow());
-        }}
-      />
+      {isAdminOrModerator && (
+        <Icon
+          id="fa fa-trash-o"
+          size={'21px'}
+          margin={'0 0 0 12px'}
+          onClick={() => {
+            setIsOpenModal(true);
+            dispatch(actions.openModalWindow());
+          }}
+        />
+      )}
 
       {isOpenModal && (
         <PrivateContent access={[ROLES.admin]}>
@@ -62,7 +67,7 @@ export const Comment = styled(CommentContainer)`
     border: 1px solid black;
     margin-top: 15px;
     padding: 5px 10px;
-    width: 100%;
+    width: calc(100% - 50px);
   }
 
   & .comment__info {
@@ -82,3 +87,11 @@ export const Comment = styled(CommentContainer)`
   & .comment__text {
   }
 `;
+
+Comment.propTypes = {
+  id: PropTypes.string.isRequired,
+  author: PropTypes.string,
+  content: PropTypes.string,
+  published_at: PropTypes.string,
+  role_id: PropTypes.string,
+};

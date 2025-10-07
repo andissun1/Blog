@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { server } from '../../BFF/bff';
+import { server } from '../BFF/bff';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Input } from '../../components/input';
-import { Button } from '../../components/Button';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
 import { Link, useNavigate } from 'react-router';
-import { H2 } from '../../components/H2';
+import { H2 } from '../components/H2';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../store/userReducer';
+import { actions } from '../store/userReducer';
 import { useLocation } from 'react-router';
 
 const authFormShema = yup.object().shape({

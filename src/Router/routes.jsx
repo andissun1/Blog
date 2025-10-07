@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router';
 import BlogLayuot from '../Blog';
-import { Authorization } from '../pages/authorization/authorization';
-import { Users } from '../pages/authorization/users';
-import { Post } from '../pages/authorization/Post';
+import { Authorization } from '../pages/authorization';
+import { Users } from '../pages/users';
+import { Post } from '../pages/Post';
 import { Main } from '../pages/Main';
 import { ErrorPage } from '../pages/ErrorPage';
 

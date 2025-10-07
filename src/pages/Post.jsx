@@ -1,26 +1,28 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PostContent } from '../../components/PostContent';
-import { Comments } from '../../components/Comments';
+import { PostContent } from '../components/PostContent';
+import { Comments } from '../components/Comments';
 import { useMatch, useNavigate, useParams } from 'react-router';
-import { loadPost } from '../../store/postReducer';
-import { PostForm } from '../../components/PostForm';
-import { PrivateContent } from '../../components/PrivateContent';
-import { ROLES } from '../../BFF/bff';
+import { loadPost } from '../store/postReducer';
+import { PostForm } from '../components/PostForm';
+import { PrivateContent } from '../components/PrivateContent';
+import { ROLES } from '../BFF/bff';
 
 const PostContainer = ({ className }) => {
   const params = useParams();
   const isEditing = useMatch('/post/:id/edit');
   const isCreating = useMatch('/post');
   const post = useSelector((store) => store.post);
+  const role_id = useSelector((store) => store.user.role_id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAdmin = role_id === ROLES.admin;
 
   useEffect(() => {
     if (isCreating) return;
     dispatch(loadPost(params.post_Id));
-  }, []);
+  }, [post]);
 
   if (post.postErrors) {
     navigate('/error');
@@ -35,8 +37,8 @@ const PostContainer = ({ className }) => {
         </PrivateContent>
       ) : (
         <>
-          <PostContent {...post} />
-          <Comments post_Id={params.post_Id} />
+          <PostContent {...post} isAdmin={isAdmin} />
+          <Comments post_Id={params.post_Id} role_id={role_id} />
         </>
       )}
     </div>

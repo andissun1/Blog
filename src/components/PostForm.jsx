@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import { deletePost, savePost } from '../store/postReducer';
 import { Icon } from './Icon';
-import { Input } from './input';
+import { Input } from './Input';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ModalWindow } from './modalWindow';
 import { actions } from '../store/appReducer';
 import { actions as postActions } from '../store/postReducer';
+import PropTypes from 'prop-types';
 
 const PostFormContainer = ({
   id,
@@ -110,3 +111,12 @@ export const PostForm = styled(PostFormContainer)`
     display: flex;
   }
 `;
+
+PostForm.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  image_URL: PropTypes.string,
+  content: PropTypes.string,
+  published_at: PropTypes.string,
+  isCreating: PropTypes.bool,
+};

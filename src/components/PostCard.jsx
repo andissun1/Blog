@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Icon } from './Icon';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 const PostCardContainer = ({ className, post }) => {
   return (
@@ -43,8 +44,6 @@ export const PostCard = styled(PostCardContainer)`
   & .card__postInfo {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    background: #00000012;
   }
 
   & .card__footer {
@@ -59,3 +58,7 @@ export const PostCard = styled(PostCardContainer)`
     align-items: baseline;
   }
 `;
+
+PostCard.propTypes = {
+  post: PropTypes.object,
+};

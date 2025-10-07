@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Icon } from './Icon';
 import { useMemo, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const debounce = (fun, delay) => {
   let timer;
@@ -50,3 +51,7 @@ export const Search = styled(SearchContainer)`
     right: 20px;
   }
 `;
+
+Search.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+};
