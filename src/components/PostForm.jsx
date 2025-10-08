@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ModalWindow } from './modalWindow';
 import { actions } from '../store/appReducer';
-import { actions as postActions } from '../store/postReducer';
 import PropTypes from 'prop-types';
 
 const PostFormContainer = ({
@@ -24,15 +23,6 @@ const PostFormContainer = ({
   const contentRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isCreating) {
-      imageRef.current.value = '';
-      titleRef.current.value = '';
-      contentRef.current.innerHTML = '';
-      dispatch(postActions.resetPost());
-    }
-  }, [isCreating]);
 
   const onSave = () => {
     const newImage = imageRef.current.value;
@@ -53,8 +43,16 @@ const PostFormContainer = ({
   return (
     <div className={className}>
       <div className="editForm">
-        <Input ref={imageRef} defaultValue={image_URL} placeholder="Изображение..." />
-        <Input ref={titleRef} defaultValue={title} placeholder="Заголовок..." />
+        <Input
+          ref={imageRef}
+          defaultValue={isCreating ? '' : image_URL}
+          placeholder="Изображение..."
+        />
+        <Input
+          ref={titleRef}
+          defaultValue={isCreating ? '' : title}
+          placeholder="Заголовок..."
+        />
       </div>
       <div className="controlPanel">
         <div>

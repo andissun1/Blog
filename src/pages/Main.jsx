@@ -14,7 +14,7 @@ const MainContainer = ({ className }) => {
   useEffect(() => {
     server.fetchPosts(page, searchPhrase).then((res) => {
       if (res.error) return;
-      setLastPage(Number(res.links));
+      setLastPage(Number(res.links)); // Нашли последнюю страницу благодаря функционалу json-server
       setPosts(res.response);
     });
   }, [page, searchPhrase]);

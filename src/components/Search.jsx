@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Icon } from './Icon';
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 const debounce = (fun, delay) => {
@@ -13,7 +13,6 @@ const debounce = (fun, delay) => {
 };
 
 const SearchContainer = ({ className, onSearch }) => {
-  // const debouncedSearch = useRef(debounce(onSearch, 2000));
   const debouncedSearch = useMemo(() => debounce(onSearch, 500), []);
 
   const handlesearch = ({ target }) => debouncedSearch(target.value);

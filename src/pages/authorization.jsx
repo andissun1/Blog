@@ -103,9 +103,7 @@ const AuthorizationContainer = ({ className }) => {
     errors?.repeatPassword?.message;
   const errorMessage = formError || serverError;
 
-  if (session) {
-    return <h2>Вы авторизованы</h2>;
-  }
+  if (session) return <h2>Вы авторизованы</h2>;
 
   return (
     <div className={className}>

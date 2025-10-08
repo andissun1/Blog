@@ -7,6 +7,7 @@ import { useMatch, useNavigate, useParams } from 'react-router';
 import { loadPost } from '../store/postReducer';
 import { PostForm } from '../components/PostForm';
 import { PrivateContent } from '../components/PrivateContent';
+import { actions as postActions } from '../store/postReducer';
 import { ROLES } from '../BFF/bff';
 
 const PostContainer = ({ className }) => {
@@ -20,9 +21,11 @@ const PostContainer = ({ className }) => {
   const isAdmin = role_id === ROLES.admin;
 
   useEffect(() => {
-    if (isCreating) return;
-    dispatch(loadPost(params.post_Id));
-  }, [post]);
+    if (isCreating) {
+      dispatch(postActions.resetPost());
+      return;
+    } else dispatch(loadPost(params.post_Id));
+  }, [post.content, post.comments.length, isCreating]);
 
   if (post.postErrors) {
     navigate('/error');

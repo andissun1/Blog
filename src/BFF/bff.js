@@ -11,102 +11,91 @@ const generateDate = () =>
     .substring(0, 16)
     .replace('T', ' ');
 
-const getUsers = () =>
-  fetch('http://localhost:3000/users').then((loadedUsers) => loadedUsers.json());
-
-const getUserByLogin = async (loginToFind) => {
-  const users = await getUsers();
-  return users.find(({ login }) => login === loginToFind);
-};
-
-const getRoles = () =>
-  fetch('http://localhost:3000/roles').then((loadedUsers) => loadedUsers.json());
-
-const addUser = async (login, password) => {
-  const data = await fetch('http://localhost:3000/users', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json;charset=utf-8' },
-    body: JSON.stringify({
-      login,
-      password,
-      registed_at: generateDate(),
-      role_id: ROLES.user,
-    }),
-  });
-
-  const newUser = data.json();
-  return newUser;
-};
-
-export async function getSession(hash) {
-  const session = await fetch(`http://localhost:3000/sessions?hash=${hash}`).then(
-    (response) => response.json()
-  );
-
-  return session[0];
-}
-
-export async function addSession(hash, user) {
-  await fetch(`http://localhost:3000/sessions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json;charset=utf-8' },
-    body: JSON.stringify({
-      hash,
-      user,
-    }),
-  }).then((response) => response.json());
-}
-
-export async function removeSession(sessionId) {
-  await fetch(`http://localhost:3000/sessions/${sessionId}`, {
-    method: 'DELETE',
-  });
-}
-
-// const transformUser = (dbUser) => ({
-//   id: dbUser.id,
-//   login: dbUser.login,
-//   password: dbUser.password,
-//   registed_at: dbUser.registed_at,
-//   role_id: dbUser.role_id,
-// });
-
+// --- Работа с сессиями пользователя и настройка доступов ---
 const sessions = {
   list: {},
   async create(user) {
     const hash = Math.random().toFixed(50);
-
-    await addSession(hash, user);
-
+    await server.addSession(hash, user);
     return hash;
   },
 
   async remove(hash) {
-    const session = await getSession(hash);
-
+    const session = await server.getSession(hash);
     if (!session) return;
-    removeSession(session[0].id);
+    server.removeSession(session.id);
   },
 
   async access(hash, accessRoles) {
-    const session = await getSession(hash);
-
+    const session = await server.getSession(hash);
     if (!session) return false;
-
-    // Убрал проверку по ролям
     return accessRoles.includes(session.user.role_id);
-    return true;
   },
 };
 
 // --- Основная часть бэка ---
 export const server = {
+  async getUsers() {
+    return fetch('http://localhost:3000/users').then((loadedUsers) => loadedUsers.json());
+  },
+
+  async getUserByLogin(loginToFind) {
+    const users = await this.getUsers();
+    return users.find(({ login }) => login === loginToFind);
+  },
+
+  async getRoles() {
+    return fetch('http://localhost:3000/roles').then((loadedUsers) => loadedUsers.json());
+  },
+
+  async addUser(login, password) {
+    const data = await fetch('http://localhost:3000/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify({
+        login,
+        password,
+        registed_at: generateDate(),
+        role_id: ROLES.user,
+      }),
+    });
+
+    const newUser = data.json();
+    return newUser;
+  },
+
+  async getSession(hash) {
+    const session = await fetch(`http://localhost:3000/sessions?hash=${hash}`).then(
+      (response) => response.json()
+    );
+
+    return session[0];
+  },
+
+  async addSession(hash, user) {
+    await fetch(`http://localhost:3000/sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' },
+      body: JSON.stringify({
+        hash,
+        user,
+      }),
+    }).then((response) => response.json());
+  },
+
+  async removeSession(sessionId) {
+    await fetch(`http://localhost:3000/sessions/${sessionId}`, {
+      method: 'DELETE',
+    });
+  },
+
   async logout(session) {
     await sessions.remove(session);
     console.log('Выход из системы');
   },
+
   async authorize(authLogin, authPassword) {
-    const user = await getUserByLogin(authLogin);
+    const user = await this.getUserByLogin(authLogin);
 
     if (!user) return { error: 'Такой пользователь не найден', response: null };
 
@@ -125,11 +114,11 @@ export const server = {
   },
 
   async register(regLogin, regPassword) {
-    const user = await getUserByLogin(regLogin);
+    const user = await this.getUserByLogin(regLogin);
 
     if (user) return { error: 'Такой логин уже занят', response: null };
 
-    const newUser = await addUser(regLogin, regPassword);
+    const newUser = await this.addUser(regLogin, regPassword);
 
     return {
       error: null,
@@ -154,7 +143,7 @@ export const server = {
       };
     }
 
-    const roles = await getRoles();
+    const roles = await this.getRoles();
 
     return {
       error: null,
@@ -174,7 +163,7 @@ export const server = {
       };
     }
 
-    const users = await getUsers();
+    const users = await this.getUsers();
 
     return {
       error: null,
@@ -279,7 +268,7 @@ export const server = {
 
     const comments = await this.getComment(postID);
 
-    const users = await getUsers();
+    const users = await this.getUsers();
 
     if (comments.error) {
       return {

@@ -38,7 +38,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: 'post',
-        element: <Post />,
+        Component: Post,
       },
       {
         path: '*',
