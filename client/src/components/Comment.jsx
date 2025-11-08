@@ -3,7 +3,7 @@ import { Icon } from './Icon';
 import { useDispatch } from 'react-redux';
 import { deleteComment } from '../store/postReducer';
 import { actions } from '../store/appReducer';
-import { ModalWindow } from './modalWindow';
+import { ModalWindow } from './ModalWindow';
 import { useState } from 'react';
 import { PrivateContent } from './PrivateContent';
 import { ROLES } from '../constants/roles';

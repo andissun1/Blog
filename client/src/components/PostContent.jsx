@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { H2 } from './H2';
 import { Icon } from './Icon';
 import { useNavigate } from 'react-router';
-import { ModalWindow } from './modalWindow';
+import { ModalWindow } from './ModalWindow';
 import { deletePost } from '../store/postReducer.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../store/appReducer.js';

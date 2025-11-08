@@ -5,7 +5,7 @@ import { Input } from './Input';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { ModalWindow } from './modalWindow';
+import { ModalWindow } from './ModalWindow';
 import { actions } from '../store/appReducer';
 import PropTypes from 'prop-types';
 
