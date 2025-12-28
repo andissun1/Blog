@@ -53,6 +53,7 @@ export const savePost = createAsyncThunk(
       : request(`/posts/`, 'POST', postInfoWithoutId);
 
     const { data } = await saveRequest;
+
     if (!data) return rejectWithValue('Ошибка при создании поста');
 
     return data;

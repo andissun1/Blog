@@ -7,10 +7,9 @@ const PostSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    imagePath: {
-      type: String,
-    },
+    image_URL: String,
     content: { type: String },
+    preview: { type: String },
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,

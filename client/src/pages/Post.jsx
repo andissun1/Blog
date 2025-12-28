@@ -51,6 +51,8 @@ const PostContainer = ({ className }) => {
 export const Post = styled(PostContainer)`
   padding: 20px 80px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 
   & .controlPanel {
     display: flex;
@@ -75,7 +77,6 @@ export const Post = styled(PostContainer)`
   }
 
   & button {
-    background-color: white;
     border: none;
     padding: 0;
   }
@@ -84,5 +85,9 @@ export const Post = styled(PostContainer)`
     display: flex;
     justify-content: center;
     color: orange;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0;
   }
 `;

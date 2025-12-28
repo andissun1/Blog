@@ -17,8 +17,6 @@ async function editPost(id, post) {
     returnDocument: 'after',
   });
 
-  console.log(newPost);
-
   await newPost.populate({
     path: 'comments',
     populate: 'author_id',

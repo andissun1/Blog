@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ModalWindow } from './ModalWindow';
 import { actions } from '../store/appReducer';
-import PropTypes from 'prop-types';
 
 const PostFormContainer = ({
   id,
@@ -17,20 +16,29 @@ const PostFormContainer = ({
   published_at,
   className,
   isCreating,
+  preview,
 }) => {
   const imageRef = useRef(null);
   const titleRef = useRef(null);
   const contentRef = useRef(null);
+  const previewRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSave = () => {
     const newImage = imageRef.current.value;
     const newTitile = titleRef.current.value;
-    const newContent = contentRef.current.innerHTML;
+    const newContent = contentRef.current.value;
+    const newPreview = previewRef.current.value;
 
     dispatch(
-      savePost({ id, image_URL: newImage, title: newTitile, content: newContent })
+      savePost({
+        id,
+        image_URL: newImage,
+        title: newTitile,
+        content: newContent,
+        preview: newPreview,
+      })
     ).then((response) => {
       if (isCreating) {
         navigate(`/post/${response.payload.id}`);
@@ -47,6 +55,11 @@ const PostFormContainer = ({
           ref={imageRef}
           defaultValue={isCreating ? '' : image_URL}
           placeholder="Изображение..."
+        />
+        <Input
+          ref={previewRef}
+          defaultValue={isCreating ? '' : preview}
+          placeholder="Описание контента..."
         />
         <Input
           ref={titleRef}
@@ -70,14 +83,9 @@ const PostFormContainer = ({
           )}
         </div>
       </div>
-      <div
-        ref={contentRef}
-        contentEditable={true}
-        suppressContentEditableWarning={true}
-        className="postText"
-      >
+      <textarea ref={contentRef} className="postText">
         {content}
-      </div>
+      </textarea>
       <ModalWindow
         text={'Удалить пост?'}
         onCancel={() => dispatch(actions.closeModalWindow())}
@@ -108,13 +116,10 @@ export const PostForm = styled(PostFormContainer)`
   & .buttons {
     display: flex;
   }
-`;
 
-PostForm.propTypes = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  image_URL: PropTypes.string,
-  content: PropTypes.string,
-  published_at: PropTypes.string,
-  isCreating: PropTypes.bool,
-};
+  & textarea {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    height: 400px;
+  }
+`;

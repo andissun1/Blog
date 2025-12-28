@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../store/appReducer.js';
 import { ROLES } from '../constants/roles.js';
 import { PrivateContent } from './PrivateContent.jsx';
-import PropTypes from 'prop-types';
+import { getDate } from '../utils/getDate.js';
 
 const PostContentContainer = ({
   id,
@@ -23,13 +23,33 @@ const PostContentContainer = ({
   const dispatch = useDispatch();
   const isOpenModal = useSelector((store) => store.app.modal.isOpen);
 
+  function cleanAndSanitize(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    doc.querySelectorAll('div').forEach((div) => {
+      const isEmpty =
+        div.innerHTML === '' || div.innerHTML === '<br>' || div.textContent.trim() === '';
+
+      if (isEmpty) {
+        div.remove();
+      } else {
+        // Опционально: заменить div на p
+        const p = doc.createElement('p');
+        p.innerHTML = div.innerHTML;
+        div.replaceWith(p);
+      }
+    });
+
+    return doc.body.innerHTML;
+  }
+
   return (
     <div className={className}>
       {image_URL && <img src={image_URL} />}
       <H2>{title}</H2>
       <div className="controlPanel">
         <div>
-          <Icon id="fa fa-calendar-o" size={'18px'} /> {published_at}
+          <Icon id="fa fa-calendar-o" size={'18px'} /> {getDate(published_at)}
         </div>
         <div>
           {isAdmin && (
@@ -53,7 +73,7 @@ const PostContentContainer = ({
           )}
         </div>
       </div>
-      <div className="">{content}</div>
+      <div className="content">{cleanAndSanitize(content)}</div>
       {isOpenModal && (
         <PrivateContent access={[ROLES.admin]}>
           <ModalWindow
@@ -72,13 +92,15 @@ const PostContentContainer = ({
 
 export const PostContent = styled(PostContentContainer)`
   white-space: pre-line;
-`;
+  display: flex;
+  flex-direction: column;
 
-PostContent.propTypes = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  image_URL: PropTypes.string,
-  content: PropTypes.string,
-  published_at: PropTypes.string,
-  isAdmin: PropTypes.bool,
-};
+  img {
+    max-height: 600px;
+    object-fit: contain;
+  }
+
+  .content {
+    white-space: pre-line;
+  }
+`;

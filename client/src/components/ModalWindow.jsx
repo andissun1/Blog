@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Button } from './Button';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 
 const ModalWindowContainer = ({ className, onConfirm, onCancel, text }) => {
   const isOpen = useSelector((store) => store.app.modal.isOpen);
@@ -40,9 +39,9 @@ export const ModalWindow = styled(ModalWindowContainer)`
   & .box {
     text-align: center;
     width: 400px;
-    border: 3px solid black;
-    background-color: white;
+    background-color: #eee;
     padding: 20px;
+    border-radius: 10px;
   }
 
   & h3 {
@@ -53,15 +52,4 @@ export const ModalWindow = styled(ModalWindowContainer)`
     display: flex;
     justify-content: center;
   }
-
-  & button {
-    background-color: #eee;
-    border: 1px solid black;
-  }
 `;
-
-ModalWindow.propTypes = {
-  onConfirm: PropTypes.func,
-  onCancel: PropTypes.func,
-  text: PropTypes.string,
-};

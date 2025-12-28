@@ -65,9 +65,7 @@ router.patch('/:id', authenticated, hasRole([ROLES.admin]), async (req, res) => 
   console.log(req.body);
 
   const updatedPost = await editPost(req.params.id, {
-    title: req.body.title,
-    content: req.body.content,
-    image_URL: req.body.image_URL,
+    ...req.body,
   });
 
   res.send({ data: mapPost(updatedPost) });

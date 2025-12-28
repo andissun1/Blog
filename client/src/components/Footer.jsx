@@ -1,17 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-// ----- Стили -----
-export const Footer = styled(FooterContainer)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 120px;
-  padding: 20px 40px;
-  background-color: white;
-  box-shadow: 0 2px 12px black;
-  font-weight: bold;
-`;
+import { colors } from '../styles/colors';
 
 // ----- Компонент ------
 function FooterContainer({ className }) {
@@ -33,19 +22,40 @@ function FooterContainer({ className }) {
 
   return (
     <footer className={className}>
-      <div>
-        <p>Блог веб-разработчика</p>
-        <p>web@developer.ru</p>
-      </div>
+      <p>@andissun</p>
 
       <div>
-        <p>
-          {city}, {new Date().toLocaleString('ru', { day: 'numeric', month: 'long' })}
-        </p>
-        <p>
-          {temp} градусов, {descripWeather}
-        </p>
+        <p>{city},</p>
+        <p>{new Date().toLocaleString('ru', { day: 'numeric', month: 'long' })},</p>
+        <p>{temp}℃</p>
+        {/* <p>{descripWeather}</p> */}
       </div>
     </footer>
   );
 }
+
+// ----- Стили -----
+export const Footer = styled(FooterContainer)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  padding-inline: 156px;
+  background-color: ${colors.main};
+
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  family: Monserrat;
+
+  & > div {
+    display: flex;
+    gap: 5px;
+    padding-inline: 20px;
+  }
+
+  @media (max-width: 1200px) {
+    padding: 10px 20px;
+    height: 30px;
+  }
+`;

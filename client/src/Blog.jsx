@@ -7,18 +7,13 @@ import { useDispatch } from 'react-redux';
 import { actions } from './store/userReducer';
 
 const Content = styled.div`
-  text-align: center;
-  margin: 120px 0 40px 0;
-`;
-
-const BlogContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 1000px;
-  min-height: 100vh;
-  background-color: white;
   margin: auto;
+  padding-inline: 156px;
+  min-height: 100vh;
+
+  @media (max-width: 1200px) {
+    padding: 13px 20px;
+  }
 `;
 
 function BlogLayuot() {
@@ -33,13 +28,13 @@ function BlogLayuot() {
   }, []);
 
   return (
-    <BlogContainer>
+    <>
       <Header />
       <Content>
         <Outlet />
       </Content>
       <Footer />
-    </BlogContainer>
+    </>
   );
 }
 

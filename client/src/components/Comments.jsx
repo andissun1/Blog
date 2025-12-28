@@ -5,7 +5,6 @@ import { Comment } from './Comment';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment } from '../store/postReducer';
 import { ROLES } from '../constants/roles';
-import PropTypes from 'prop-types';
 
 const CommentsContainer = ({ className, post_Id, role_id }) => {
   const [newComment, setNewComment] = useState('');
@@ -62,6 +61,9 @@ export const Comments = styled(CommentsContainer)`
   }
 
   & textarea {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
     height: 120px;
     width: 100%;
     resize: none;
@@ -69,10 +71,8 @@ export const Comments = styled(CommentsContainer)`
     font-family: inherit;
     margin-right: 10px;
   }
-`;
 
-Comments.propTypes = {
-  children: PropTypes.node.isRequired,
-  post_Id: PropTypes.string,
-  role_id: PropTypes.string,
-};
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;

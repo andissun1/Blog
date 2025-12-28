@@ -7,7 +7,8 @@ import { ModalWindow } from './ModalWindow';
 import { useState } from 'react';
 import { PrivateContent } from './PrivateContent';
 import { ROLES } from '../constants/roles';
-import PropTypes from 'prop-types';
+import { getDate } from '../utils/getDate';
+import { colors } from '../styles/colors';
 
 const CommentContainer = ({ className, id, author, content, published_at, role_id }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const CommentContainer = ({ className, id, author, content, published_at, role_i
           </div>
           <div className="comment__publishedAt">
             <Icon id="fa fa-calendar-o" size={'18px'} margin={'0 10px 0 0'} />
-            {published_at}
+            {getDate(published_at)}
           </div>
         </div>
         <div className="comment__text">{content}</div>
@@ -64,7 +65,8 @@ export const Comment = styled(CommentContainer)`
   align-items: baseline;
 
   & .wrapper {
-    border: 1px solid black;
+    border-radius: 5px;
+    background-color: ${colors['green-100']};
     margin-top: 15px;
     padding: 5px 10px;
     width: calc(100% - 50px);
@@ -87,11 +89,3 @@ export const Comment = styled(CommentContainer)`
   & .comment__text {
   }
 `;
-
-Comment.propTypes = {
-  id: PropTypes.string.isRequired,
-  author: PropTypes.string,
-  content: PropTypes.string,
-  published_at: PropTypes.string,
-  role_id: PropTypes.string,
-};

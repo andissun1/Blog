@@ -147,13 +147,17 @@ const AuthorizationContainer = ({ className }) => {
 };
 
 export const Authorization = styled(AuthorizationContainer)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
+  height: 60vh;
 
   & > form {
     display: flex;
     flex-direction: column;
     width: 260px;
-    margin: auto;
     gap: 10px;
   }
 
@@ -161,6 +165,10 @@ export const Authorization = styled(AuthorizationContainer)`
     font-size: 18px;
     text-decoration: underline;
     margin: 20px 0;
+  }
+
+  input {
+    border-radius: 5px;
   }
 
   & div {

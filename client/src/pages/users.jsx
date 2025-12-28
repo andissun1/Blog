@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../store/appReducer';
 import { useNavigate } from 'react-router';
 import { request } from '../utils/request';
+import { colors } from '../styles/colors';
 
 export const usersContainer = ({ className }) => {
   const errorMessage = useSelector((store) => store.app.accessErrors);
@@ -63,13 +64,12 @@ export const usersContainer = ({ className }) => {
 export const Users = styled(usersContainer)`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
   font-size: 18px;
-  text-align: left;
-
-  & > div {
-    padding: 0 10px;
-  }
+  text-align: center;
+  height: 60vh;
+  max-width: 1000px;
+  margin: auto;
 
   & .users__rows,
   .users__item {
@@ -78,38 +78,32 @@ export const Users = styled(usersContainer)`
   }
 
   & .users__rows {
-    margin-top: 10px;
+    margin: 10px auto;
   }
 
   .users__item {
-    border: 1px solid black;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    width: 100%;
+
+    border: 1px solid ${colors['green-400']};
+    border-radius: 5px;
+    background-color: ${colors['green-100']};
     padding-left: 10px;
   }
 
   & .users__header {
-    display: flex;
-    width: 600px;
-  }
-
-  & .users__header > div {
-    width: 160px;
-    margin-left: 10px;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    padding-left: 10px;
+    padding-right: 60px;
   }
 
   & .users__header > div:last-child {
     margin-left: 60px;
   }
 
-  & .users__login {
-    width: 172px;
-  }
-
-  & .users__registed {
-    width: 213px;
-  }
-
   & .users__role {
-    width: 158px;
     display: flex;
   }
 `;

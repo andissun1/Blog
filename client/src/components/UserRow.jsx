@@ -3,6 +3,7 @@ import { ROLES } from '../constants/roles';
 import { Icon } from './Icon';
 import PropTypes from 'prop-types';
 import { request } from '../utils/request';
+import { getDate } from '../utils/getDate';
 
 export const UserRow = ({ login, registed_at, role_id, roles, userID, userDelete }) => {
   const [initialRole, setInitialRole] = useState(role_id);
@@ -21,7 +22,7 @@ export const UserRow = ({ login, registed_at, role_id, roles, userID, userDelete
     <div className="users__rows">
       <div className="users__item">
         <div className="users__login">{login}</div>
-        <div className="users__registed">{registed_at}</div>
+        <div className="users__registed">{getDate(registed_at)}</div>
         <div className="users__role">
           <select value={selectedRoleID} onChange={handleSelect}>
             {roles.map(({ name, id }) => {
