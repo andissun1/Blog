@@ -62,8 +62,6 @@ router.post('/', authenticated, hasRole([ROLES.admin]), async (req, res) => {
 });
 
 router.patch('/:id', authenticated, hasRole([ROLES.admin]), async (req, res) => {
-  console.log(req.body);
-
   const updatedPost = await editPost(req.params.id, {
     ...req.body,
   });

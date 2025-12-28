@@ -1,0 +1,28 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: myServer
+    restart: always
+    ports:
+      - '80:3005'
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+  mongo:
+    image: mongo:7
+    container_name: myMongo
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: testdb
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

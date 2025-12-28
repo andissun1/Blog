@@ -33,7 +33,6 @@ async function loadDataFile(filePath, handler) {
   try {
     fs.readFile(filePath, 'utf8', async (err, fileContent) => {
       const data = JSON.parse(fileContent);
-      console.log(data);
       await handler(data);
     });
   } catch (error) {

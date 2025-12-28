@@ -162,9 +162,11 @@ export const Authorization = styled(AuthorizationContainer)`
   }
 
   & a {
-    font-size: 18px;
-    text-decoration: underline;
-    margin: 20px 0;
+    font-size: 16px;
+    text-decoration: none;
+    margin: 0;
+    color: black;
+    margin: auto;
   }
 
   input {
