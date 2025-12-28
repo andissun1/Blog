@@ -3,32 +3,19 @@
 Сайт для ведения блога с серверной частью.
 
 ## Установка
-Приложение доступно для локального запуска. Запустим клиент, сервер и БД.
-Запускаем конейнер с mongoDB:
+Приложение доступно для локального запуска. Запустим клиент, сервер и БД при помощи docker-compose. 
+Создаем в корне проекта env файл: 
+```
+DB_CONNECTION_STRING=mongodb://user:mongopass@myMongo:27017/blog_app?authSource=admin
+SECRET_JWT=test
+```
+Поднимаем локально на 80 порту командой:
 
 ```
-docker run -d \
-  --name mongo \
-  -p 27017:27017 \
-  -v mongo_data:/data/db \
-  -e MONGO_INITDB_DATABASE=testdb \
-  -e MONGO_INITDB_ROOT_USERNAME=user \
-  -e MONGO_INITDB_ROOT_PASSWORD=mongopass \
-  mongo:latest
+docker compose up --build
+```
+Готово! Вы великолепны!
 
-```
-Запускаем сервер (порт 3001):
-```
-cd server
-npm i
-npm run dev
-```
-Запускаем клиент (порт 3000):
-```
-cd client
-npm i
-npm run dev
-```
 
 ## Функциоанл
 В приложении 3 сущности: пользователи, посты, комментарии.  
