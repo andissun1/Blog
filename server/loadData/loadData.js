@@ -1,13 +1,11 @@
-const Comment = require('../models/Comment');
 const User = require('../models/User');
 const Post = require('../models/Post');
 const fs = require('fs');
 const path = require('path');
 
 async function loadInitialData() {
-  const userDataPath = path.join(__dirname, 'loadData', 'UserData.json');
-  const postDataPath = path.join(__dirname, 'loadData', 'PostData.json');
-  const commentDataPath = path.join(__dirname, 'loadData', 'CommentData.json');
+  const userDataPath = path.join(__dirname, 'UserData.json');
+  const postDataPath = path.join(__dirname, 'PostData.json');
 
   try {
     // Проверяем, есть ли что-то в базе
@@ -19,15 +17,11 @@ async function loadInitialData() {
 
     // Читаем и загружаем данные
     await loadDataFile(userDataPath, async (data) => {
-      for (const user of data.users) await User.create(user);
+      for (const user of data) await User.create(user);
     });
 
     await loadDataFile(postDataPath, async (data) => {
-      for (const post of data.posts) await Post.create(post);
-    });
-
-    await loadDataFile(commentDataPath, async (data) => {
-      for (const comment of data.comments) await Comment.create(comment);
+      for (const post of data) await Post.create(post);
     });
 
     console.log('Данные успешно загружены');
@@ -37,9 +31,11 @@ async function loadInitialData() {
 }
 async function loadDataFile(filePath, handler) {
   try {
-    const fileContent = await fs.readFile(filePath, 'utf-8');
-    const data = JSON.parse(fileContent);
-    await handler(data);
+    fs.readFile(filePath, 'utf8', async (err, fileContent) => {
+      const data = JSON.parse(fileContent);
+      console.log(data);
+      await handler(data);
+    });
   } catch (error) {
     console.error(error);
   }
